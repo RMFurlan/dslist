@@ -3,6 +3,7 @@ package com.furlan.dslist.services;
 import com.furlan.dslist.dto.GameDTO;
 import com.furlan.dslist.dto.GameMinDTO;
 import com.furlan.dslist.entities.Game;
+import com.furlan.dslist.projections.GameMinProjection;
 import com.furlan.dslist.repositories.GameRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll(){
         List<Game> result = gameRepository.findAll();
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId){
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
         return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 }
